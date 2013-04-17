@@ -1,7 +1,9 @@
 banshee_np	: banshee-weechat current song script (usage: /np)
 
-fortune		: set the topic to a fortune <= 140 chars (with some syntax highlighting) (usage: /fortune)
+fortune		: set the topic to a fortune <= 140 chars (with some syntax highlighting)
+			: (usage: /fortune)
 
-notify_send	: execute a user-defined system command upon highlight or private message (with smart delays to avoid spam)
-			: see plugins.var.perl.notify_send.* for options. $type, $name, and $message are valid replacements for
-			: the specified command
+notify_send	: execute a user-defined system command upon highlight or private
+			: message (with smart delays to avoid spam) see
+			: plugins.var.perl.notify_send.* for options. $type, $name, and $message
+			: will be expanded in the specified command
