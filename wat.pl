@@ -23,6 +23,7 @@ my @replacements = (
 );
 
 my $state="off";
+my $length=0;
 
 sub toggle {
 	my $output="";
@@ -42,14 +43,20 @@ sub catch_word {
 
 	if($rval) {
 		if( $state eq "on" && substr($rval, 0, 1) ne "/" ) {
-			if(length($rval) > 1) {
-				if( substr($rval, length($rval)-1, 1) eq " " && substr($rval, length($rval)-2, 1) ne " " ) {
-					$rval=mutate($rval);
-					$rval.=" ";
-					my $length=length($rval);
-					weechat::buffer_set($buffer, 'input', "$rval");
-					weechat::buffer_set($buffer, 'input_pos', "$length");
+			if(length($rval) > $length) {
+				$length=length($rval);
+				if($length > 1) {
+					if( substr($rval, $length-1, 1) eq " " && substr($rval, $length-2, 1) ne " " ) {
+						$rval=mutate($rval);
+						$rval.=" ";
+						$length=length($rval);
+						
+						weechat::buffer_set($buffer, 'input', "$rval");
+						weechat::buffer_set($buffer, 'input_pos', "$length");
+					}
 				}
+			} else {
+				$length=length($rval);
 			}
 		}
 	}
@@ -79,7 +86,7 @@ sub mutate {
 			$words[$#words]=$replacements[int(rand(@replacements))];
 		}
 	}
-
+	
 	my $rval=join(' ', @words);
 	return $rval;
 }
