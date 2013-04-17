@@ -7,3 +7,5 @@ notify_send	: execute a user-defined system command upon highlight or private
 		: message (with smart delays to avoid spam) see
 		: plugins.var.perl.notify_send.* for options. $type, $name, and
 		: $message will be expanded in the specified command
+
+wat		: replace words at random (usage: enable/disable with /wat <on|off>)
