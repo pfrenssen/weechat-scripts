@@ -1,4 +1,4 @@
-banshee_np	: banshee-weechat current song script (usage: /np)
+banshee_np	: banshee current song script (usage: /np)
 
 fortune		: set the topic to a fortune <= 140 chars (with some syntax highlighting)
 		: (usage: /fortune)
