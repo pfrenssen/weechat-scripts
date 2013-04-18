@@ -1,6 +1,7 @@
 use strict;
 use warnings;
 use utf8;
+use List::Util 'shuffle';
 
 weechat::register ("wat", "shmibs", "0.3", "GPL", "replace words at random ( usage: enable/disable with /wat <on|off> )", "", "");
 weechat::hook_command("wat", "", "", "", "", "toggle", "");
@@ -8,18 +9,13 @@ weechat::hook_modifier("input_text_content", "catch_word", "");
 weechat::hook_modifier("input_text_for_buffer", "catch_send", "");
 
 my @replacements = (
-	'fairy',
-	'pony',
-	'accidentally',
-	'broken',
-	'attractive',
-	'portable',
-	'salivating',
-	'wipe',
-	'boring',
-	'garish',
-	'flamboyant',
-	'putrid'
+	'fairy', 'pony', 'accidentally', 'broken', 'attractive',
+	'portable', 'salivating', 'wipe', 'boring', 'garish',
+	'flamboyant', 'putrid', 'pustule', 'cardigan', 'waldo',
+	'foreign', 'dumpling', 'phalanges', 'goose', 'didactic',
+	'vroom', 'zygote', 'tractor', 'blatant', 'authoritatively',
+	'feral', 'dung', 'scones', 'busted', 'tortoise',
+	'willingly', 'excited', 'glorious'
 );
 
 my $state="off";
@@ -78,13 +74,29 @@ sub catch_send {
 # apply modifications to the last word of the input string
 sub mutate {
 	my @words=split(/ |\t|\n/, $_[0]);
+	my $punctuation="";
 
 	if($words[$#words]) {
 		# apply desired transformations to the most
 		# recently typed word here
 		if( !int(rand(20)) ) {
-			$words[$#words]=$replacements[int(rand(@replacements))];
+			if( $words[$#words]=~/.|,|'|"|\?|!|:|;|[|]|(|)/ ) {
+				$punctuation=substr($words[$#words], length($words[$#words])-1, 1);
+			}
+			$words[$#words]=$replacements[int(rand(@replacements))].$punctuation;
 		}
+	}
+	
+	# shuffle all words in sentence
+	if( !int(rand(20)) ) {
+		@words=shuffle(@words);
+	}
+	
+	# shuffle a single word
+	if( !int(rand(15)) ) {
+		my @chars=split(//, $words[$#words]);
+		@chars=shuffle(@chars);
+		$words[$#words]=join('', @chars);
 	}
 	
 	my $rval=join(' ', @words);
