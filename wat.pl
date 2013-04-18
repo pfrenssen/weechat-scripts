@@ -1,7 +1,6 @@
 use strict;
 use warnings;
 use utf8;
-use List::Util 'shuffle';
 
 weechat::register ("wat", "shmibs", "0.3", "GPL", "intentionally obfuscate speach ( usage: enable/disable with /wat <on|off> )", "", "");
 weechat::hook_command("wat", "", "", "", "", "toggle", "");
