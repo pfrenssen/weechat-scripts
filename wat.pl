@@ -74,16 +74,18 @@ sub catch_send {
 # apply modifications to the last word of the input string
 sub mutate {
 	my @words=split(/ |\t|\n/, $_[0]);
-	my $punctuation="";
+	my $punctuation=0;
 
 	if($words[$#words]) {
+		if( $words[$#words]=~/.|,|'|"|\?|!|:|;|[|]|(|)/ ) {
+			$punctuation=substr($words[$#words], length($words[$#words])-1, 1);
+			$words[$#words]=substr($words[$#words], 0, length($words[$#words])-1);
+		}
+		
 		# apply desired transformations to the most
 		# recently typed word here
 		if( !int(rand(20)) ) {
-			if( $words[$#words]=~/.|,|'|"|\?|!|:|;|[|]|(|)/ ) {
-				$punctuation=substr($words[$#words], length($words[$#words])-1, 1);
-			}
-			$words[$#words]=$replacements[int(rand(@replacements))].$punctuation;
+			$words[$#words]=$replacements[int(rand(@replacements))];
 		}
 	}
 	
@@ -97,6 +99,10 @@ sub mutate {
 		my @chars=split(//, $words[$#words]);
 		@chars=shuffle(@chars);
 		$words[$#words]=join('', @chars);
+	}
+	
+	if($punctuation) {
+		$words[$#words].=$punctuation;
 	}
 	
 	my $rval=join(' ', @words);
