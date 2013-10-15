@@ -116,11 +116,12 @@ sub new_notification {
 
 	# run system command
 	if($send eq 'true') {
-		my ($command,$args) = split(/ /,$settings{'command'},2);
-		$args =~ s/\$type/$type/g;
-		$args =~ s/\$name/$name/g;
-		$args =~ s/\$message/$message/g;
-		system($command, $args);
+		my @args = split(/ /,$settings{'command'});
+		my $command = shift(@args);
+		s/\$type/$type/g for @args;
+		s/\$name/$name/g for @args;
+		s/\$message/$message/g for @args;
+		system($command, @args);
 	}
 
 	return weechat::WEECHAT_RC_OK;
